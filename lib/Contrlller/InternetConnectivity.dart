@@ -1,4 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:ezeehome_webview/constants.dart';
 
 import 'package:flutter/material.dart';
 
@@ -37,7 +38,7 @@ Widget noInternetConnectionMessage() {
           Icon(
             Icons.signal_wifi_connected_no_internet_4,
             size: 60,
-            color: Colors.black,
+            color:MyColors.kprimaryColor,
           ),
           Container(
             child: Text(
