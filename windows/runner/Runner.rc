@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "Influencers with Likes" "\0"
+            VALUE "FileDescription", "HeyJinni Lite" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "Influencers with Likes" "\0"
+            VALUE "InternalName", "HeyJinni Lite" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "ezeehome_webview.exe" "\0"
-            VALUE "ProductName", "Influencers with Likes" "\0"
+            VALUE "ProductName", "HeyJinni Lite" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
