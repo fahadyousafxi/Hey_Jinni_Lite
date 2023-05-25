@@ -143,9 +143,14 @@ class _HomeState extends State<Home> {
                           })
                     },
                     navigationDelegate: (NavigationRequest request) {
-                      if (request.url.startsWith('https://www.youtube.com/')) {
+                      if (request.url.startsWith('https://heyjinni')) {
+                        return NavigationDecision.navigate;
+                      } else if (request.url
+                          .startsWith('https://www.youtube.com/')) {
                         print('blocking navigation to $request}');
                         return NavigationDecision.prevent;
+                      } else {
+                        launchUrl(Uri.parse(request.url));
                       }
                       print('allowing navigation to $request');
                       return NavigationDecision.navigate;
@@ -162,52 +167,6 @@ class _HomeState extends State<Home> {
                   );
                 }),
               ),
-            )
-          : Builder(builder: (BuildContext context) {
-              return WebView(
-                initialUrl: 'https://heyjinni.com/',
-                javascriptMode: JavascriptMode.unrestricted,
-                onWebViewCreated: (WebViewController webViewController) {
-                  _controller.complete(webViewController);
-                },
-                onProgress: (int progress) {
-                  print("WebView is loading (progress : $progress%)");
-                },
-                javascriptChannels: <JavascriptChannel>{
-                  // _toasterJavascriptChannel(context),
-                  JavascriptChannel(
-                      name: 'Toaster',
-                      onMessageReceived: (JavascriptMessage message) {
-                        var snackBar = SnackBar(
-                          content: Text(message.message),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      })
-                },
-                navigationDelegate: (NavigationRequest request) {
-                  if (request.url.startsWith('https://heyjinni')) {
-                    return NavigationDecision.navigate;
-                  } else if (request.url
-                      .startsWith('https://www.youtube.com/')) {
-                    print('blocking navigation to $request}');
-                    return NavigationDecision.prevent;
-                  } else {
-                    launchUrl(Uri.parse(request.url));
-                  }
-                  print('allowing navigation to $request');
-                  return NavigationDecision.navigate;
-                },
-                onPageStarted: (String url) {
-                  print('Page started loading: $url');
-                },
-                onPageFinished: (String url) {
-                  print('Page finished loading: $url');
-                },
-                gestureNavigationEnabled: true,
-                geolocationEnabled: false, //support geolocation or not
-                zoomEnabled: true,
-              );
-            }),
       ),
     );
   }
@@ -248,16 +207,4 @@ class _HomeState extends State<Home> {
       print('Some or all permissions not granted!');
     }
   }
-
-// navigate to the external links
-//   void handleUrlNavigation(String url) {
-//   if (url.startsWith('http://your-own-app-url')) {
-//     // Open the URL inside the app
-//     flutterWebviewPlugin.reloadUrl(url);
-//   } else {
-//     // Open the URL in the external browser
-//     launch(url);
-//   }
-// }
-
 }
