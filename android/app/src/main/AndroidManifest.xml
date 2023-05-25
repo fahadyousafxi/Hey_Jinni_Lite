@@ -1,17 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.ezeehome_webview">
-    <!-- Other manifest declarations -->
    <uses-permission android:name="android.permission.INTERNET"/>
-   <uses-permission android:name="android.permission.CAMERA" />
-   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-   <uses-permission android:name="android.permission.RECORD_AUDIO" />
-   <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-   <uses-permission android:name="android.permission.CALL_PHONE" />
-   <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-   <!-- Add more permission entries as needed -->
    <application
-        android:label="HeyJinni Lite"
+        android:label="Influencers with Likes"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
