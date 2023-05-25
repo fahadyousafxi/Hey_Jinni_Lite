@@ -5,6 +5,7 @@ import 'package:ezeehome_webview/Contrlller/InternetConnectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_pro/webview_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Home extends StatefulWidget {
   Home({
@@ -102,9 +103,14 @@ class _HomeState extends State<Home> {
                       })
                 },
                 navigationDelegate: (NavigationRequest request) {
-                  if (request.url.startsWith('https://www.youtube.com/')) {
+                  if (request.url.startsWith('https://heyjinni')) {
+                    return NavigationDecision.navigate;
+                  } else if (request.url
+                      .startsWith('https://www.youtube.com/')) {
                     print('blocking navigation to $request}');
                     return NavigationDecision.prevent;
+                  } else {
+                    launchUrl(Uri.parse(request.url));
                   }
                   print('allowing navigation to $request');
                   return NavigationDecision.navigate;
@@ -160,5 +166,15 @@ class _HomeState extends State<Home> {
     }
   }
 
-}
+// navigate to the external links
+//   void handleUrlNavigation(String url) {
+//   if (url.startsWith('http://your-own-app-url')) {
+//     // Open the URL inside the app
+//     flutterWebviewPlugin.reloadUrl(url);
+//   } else {
+//     // Open the URL in the external browser
+//     launch(url);
+//   }
+// }
 
+}
