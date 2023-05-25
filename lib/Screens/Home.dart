@@ -47,11 +47,6 @@ class _HomeState extends State<Home> {
           _webViewController.future.then((controller) => controller.goBack());
           return false;
         }
-        //   if (await _webViewController.future.then((controller) => controller.canGoBack())) {
-        //   _webViewController.future.then((controller) => controller.goBack());
-        //   return true;
-        // }
-        // return false;
       },
       child: Scaffold(
         appBar: PreferredSize(
