@@ -45,6 +45,7 @@ dependencies:
   rename: ^2.1.1
   permission_handler: ^10.2.0
   url_launcher: ^6.1.11
+  percent_indicator: ^4.2.3
 
 dev_dependencies:
   flutter_test:
@@ -62,6 +63,7 @@ flutter_native_splash:
   # image: assets/images/splash.png
   android: true
   ios: true
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

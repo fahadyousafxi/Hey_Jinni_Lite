@@ -52,18 +52,18 @@
 		<!-- permsiions added starts -->
 		<key>NSCameraUsageDescription</key>
 		<string>Access to the camera is required to upload photos.</string>
-
 		<key>NSPhotoLibraryUsageDescription</key>
 		<string>Access to the photo library is required to select photos.</string>
-
 		<key>NSMicrophoneUsageDescription</key>
 		<string>Access to the microphone is required to record audio.</string>
-
 		<key>NSContactsUsageDescription</key>
 		<string>Access to contacts is required to display contact information.</string>
-
 		<key>NSBluetoothAlwaysUsageDescription</key>
 		<string>Access to Bluetooth is required to connect to devices.</string>
-
+		<key>LSApplicationQueriesSchemes</key>
+		<array>
+		  	<string>sms</string>
+		 	<string>tel</string>
+		</array>
 	</dict>
 </plist>
