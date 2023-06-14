@@ -19,11 +19,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
+	<string>1.2.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>5</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>sms</string>
@@ -34,7 +34,7 @@
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Access to Bluetooth is required to connect to devices.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Access to the camera is required to upload photos.</string>
+	<string>Access is required so that you can take photos, record videos, preview and share to your profile and feed.</string>
 	<key>NSContactsUsageDescription</key>
 	<string>Access to contacts is required to display contact information.</string>
 	<key>NSMicrophoneUsageDescription</key>

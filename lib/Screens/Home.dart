@@ -139,7 +139,7 @@ class _HomeState extends State<Home> {
                           })
                     },
                     navigationDelegate: (NavigationRequest request) {
-                      if (request.url.startsWith('https://heyjinni.com/')) {
+                      if (request.url.contains('heyjinni.com')) {
                         return NavigationDecision.navigate;
                       } else if (request.url
                           .startsWith('https://www.youtube.com/')) {
