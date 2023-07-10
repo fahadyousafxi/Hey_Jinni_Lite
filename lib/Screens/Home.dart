@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:ezeehome_webview/Contrlller/InternetConnectivity.dart';
+import 'package:ezeehome_webview/Contrlller/ad_mob_services.dart';
 import 'package:ezeehome_webview/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_pro/webview_flutter.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,13 +25,32 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   var IsInternetConnected = true;
   bool loader = false;
-  // final Completer<WebViewController> _controller =
-  //     Completer<WebViewController>();
   final _webViewController = Completer<WebViewController>();
   double _progress = 0.0; // Variable to hold the progress percentage
   bool _isLoading = true;
-
   int _progressText = 0; // Variable to track loading state
+
+  late BannerAd _bannerAd;
+  InterstitialAd? _interstialAd;
+  bool isAdLoaded = false;
+  void _createBannerAd() {
+    _bannerAd = BannerAd(
+        size: AdSize.banner,
+        adUnitId: AdsMobServices.BannerAdUnitId!,
+        listener: AdsMobServices.bannerAdListener,
+        request: AdRequest())
+      ..load();
+  }
+
+  void _createInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId: AdsMobServices.InterstitialAdId!,
+        request: AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+            onAdLoaded: (ad) => _interstialAd = ad,
+            onAdFailedToLoad: (LoadAdError loadAdError) =>
+                _interstialAd = null));
+  }
 
   @override
   void initState() {
@@ -39,18 +60,24 @@ class _HomeState extends State<Home> {
     }
     requestPermissions();
     super.initState();
+    _createBannerAd();
+    _createInterstitialAd();
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+                  _showInterstitalAd();
+
         bool? goBack =
             await _webViewController.future.then((value) => value.canGoBack());
         if (goBack != true) {
+          print('appClosed');
           return true;
         } else {
           _webViewController.future.then((controller) => controller.goBack());
+          print('appnotClosed');
           return false;
         }
       },
@@ -202,166 +229,18 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
+        bottomNavigationBar: _bannerAd != null
+            ? Container(
+                decoration: BoxDecoration(color: Colors.transparent),
+                height: _bannerAd.size.height.toDouble(),
+                width: _bannerAd.size.width.toDouble(),
+                child: AdWidget(ad: _bannerAd),
+              )
+            : SizedBox(),
       ),
     );
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return WillPopScope(
-  //     onWillPop: () async {
-  //       bool? goBack =
-  //           await _webViewController.future.then((value) => value.canGoBack());
-  //       if (goBack != true) {
-  //         return true;
-  //       } else {
-  //         _webViewController.future.then((controller) => controller.goBack());
-  //         return false;
-  //       }
-  //     },
-  //     child: Scaffold(
-  //       appBar: PreferredSize(
-  //         preferredSize: Size.fromHeight(0),
-  //         child: AppBar(
-  //           backgroundColor: MyColors.kprimaryColor,
-  //           elevation: 0,
-  //         ),
-  //       ),
-  //       // AppBar(
-  //       //   backgroundColor: MyColors.kprimaryColor,
-  //       //   // title: Text('DriveBC'),
-  //       //   //centerTitle: true,
-  //       //   toolbarHeight: 10,
-  //       // ),
-  //       body: IsInternetConnected == false
-  //           ? RefreshIndicator(
-  //               onRefresh: () {
-  //                 return Future.delayed(Duration(seconds: 1), () {
-  //                   Navigator.pop(context);
-  //                   Navigator.of(context).push(MaterialPageRoute(
-  //                     builder: (context) => Home(
-  //                       isInternetConnected: IsInternetConnected,
-  //                     ),
-  //                   ));
-  //                 });
-  //               },
-  //               child: SingleChildScrollView(
-  //                 physics: AlwaysScrollableScrollPhysics(),
-  //                 child: SizedBox(
-  //                   height: MediaQuery.of(context).size.height,
-  //                   child: Center(
-  //                     child: Column(
-  //                       mainAxisAlignment: MainAxisAlignment.center,
-  //                       children: [
-  //                         Icon(
-  //                           Icons.signal_wifi_connected_no_internet_4,
-  //                           size: 60,
-  //                           color: MyColors.kprimaryColor,
-  //                         ),
-  //                         Container(
-  //                           child: Text(
-  //                             'No Internet Connection',
-  //                             style: TextStyle(
-  //                               fontSize: 18,
-  //                             ),
-  //                           ),
-  //                         ),
-  //                         SizedBox(
-  //                           height: 20,
-  //                         ),
-  //                         ElevatedButton(
-  //                           style: ElevatedButton.styleFrom(
-  //                             backgroundColor: MyColors.kprimaryColor,
-  //                           ),
-  //                           onPressed: () {
-  //                             Navigator.pop(context);
-  //                             Navigator.of(context).push(MaterialPageRoute(
-  //                               builder: (context) => Home(
-  //                                 isInternetConnected: IsInternetConnected,
-  //                               ),
-  //                             ));
-  //                           },
-  //                           child: Text('Reload Page'),
-  //                         ),
-  //                       ],
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ),
-  //             )
-  //           : SizedBox(
-  //               child: Builder(builder: (BuildContext context) {
-  //                 return Stack(
-  //                   children: [
-  //                     WebView(
-  //                       initialUrl: 'https://heyjinni.com/',
-  //                       javascriptMode: JavascriptMode.unrestricted,
-  //                       onWebViewCreated:
-  //                           (WebViewController webViewController) {
-  //                         _webViewController.complete(webViewController);
-  //                       },
-  //                       onProgress: (int progress) {
-  //                         print("WebView is loading (progress : $progress%)");
-  //                         // if (progress >= 90) {
-  //                         //   setState(() {
-  //                         //     _isLoading == false;
-  //                         //   });
-  //                         // }
-  //                       },
-  //                       javascriptChannels: <JavascriptChannel>{
-  //                         // _toasterJavascriptChannel(context),
-  //                         JavascriptChannel(
-  //                             name: 'Toaster',
-  //                             onMessageReceived: (JavascriptMessage message) {
-  //                               var snackBar = SnackBar(
-  //                                 content: Text(message.message),
-  //                               );
-  //                               ScaffoldMessenger.of(context)
-  //                                   .showSnackBar(snackBar);
-  //                             })
-  //                       },
-  //                       navigationDelegate: (NavigationRequest request) {
-  //                         if (request.url.startsWith('https://heyjinni')) {
-  //                           return NavigationDecision.navigate;
-  //                         } else if (request.url
-  //                             .startsWith('https://www.youtube.com/')) {
-  //                           print('blocking navigation to $request}');
-  //                           return NavigationDecision.prevent;
-  //                         } else {
-  //                           launchUrl(Uri.parse(request.url));
-  //                         }
-  //                         print('allowing navigation to $request');
-  //                         return NavigationDecision.navigate;
-  //                       },
-  //                       onPageStarted: (String url) {
-  //                         print('Page started loading: $url');
-  //                         setState(() {
-  //                           _isLoading =
-  //                               true; // Set loading state to true when a new page starts loading
-  //                         });
-  //                       },
-  //                       onPageFinished: (String url) {
-  //                         print('Page finished loading: $url');
-  //                         setState(() {
-  //                           _isLoading == false;
-  //                         });
-  //                       },
-  //                       gestureNavigationEnabled: true,
-  //                       geolocationEnabled: false, //support geolocation or not
-  //                       zoomEnabled: true,
-  //                     ),
-  //                     Visibility(
-  //                       visible:
-  //                           _isLoading, // Show the progress indicator only when loading
-  //                       child: CircularProgressIndicator(),
-  //                     ),
-  //                   ],
-  //                 );
-  //               }),
-  //             ),
-  //     ),
-  //   );
-  // }
   Future<void> _launchExternalUrl(String url) async {
     if (await canLaunch(url)) {
       await launch(url, forceSafariVC: false, forceWebView: false);
@@ -404,6 +283,21 @@ class _HomeState extends State<Home> {
     } else {
       // Permissions not granted, handle accordingly.
       print('Some or all permissions not granted!');
+    }
+  }
+
+  void _showInterstitalAd() {
+    if (_interstialAd != null) {
+      _interstialAd!.fullScreenContentCallback =
+          FullScreenContentCallback(onAdDismissedFullScreenContent: (ad) {
+        ad.dispose();
+        _createInterstitialAd();
+      }, onAdFailedToShowFullScreenContent: (ad, error) {
+        ad.dispose();
+        _createInterstitialAd();
+      });
+      _interstialAd!.show();
+      _interstialAd = null;
     }
   }
 }

@@ -64,5 +64,10 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+
+     <!-- change ad test id here this one is androids one -->
+	<key>GADApplicationIndentifier</key>
+	<string>ca-app-pub-6720288058326515~8233494763</string>
+
 </dict>
 </plist>

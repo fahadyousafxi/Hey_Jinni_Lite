@@ -1,9 +1,11 @@
 import 'package:ezeehome_webview/Contrlller/InternetConnectivity.dart';
 import 'package:ezeehome_webview/Screens/Home.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   await checkInternetConnectionForDashboard();
   runApp(MyApp());
 }
